@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 
-router.post('/', productController.createProduct);          // إنشاء منتج
-router.get('/', productController.getAllProducts);          // كل المنتجات
-router.get('/:id', productController.getProductById);       // منتج واحد
-router.put('/:id', productController.updateProduct);        // تعديل
-router.delete('/:id', productController.deleteProduct);     // حذف
+router.post('/', productController.createProduct);         
+router.get('/', productController.getAllProducts);       
+router.get('/:id', productController.getProductById);     
+router.put('/:id', productController.updateProduct);        
+router.delete('/:id', productController.deleteProduct);    
 module.exports = router;

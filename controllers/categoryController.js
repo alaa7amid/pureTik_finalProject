@@ -1,42 +1,42 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// إنشاء تصنيف جديد
+// Create a new category
 exports.createCategory = async (req, res) => {
   try {
     const data = req.body;
     const category = await prisma.category.create({ data });
     res.status(201).json(category);
   } catch (err) {
-    res.status(400).json({ error: "فشل إنشاء التصنيف", details: err.message });
+    res.status(400).json({ error: "Failed to create category", details: err.message });
   }
 };
 
-// عرض كل التصنيفات
+// Get all categories
 exports.getAllCategories = async (req, res) => {
   try {
     const categories = await prisma.category.findMany();
     res.json(categories);
   } catch (err) {
-    res.status(500).json({ error: "فشل في جلب التصنيفات" });
+    res.status(500).json({ error: "Failed to fetch categories" });
   }
 };
 
-// عرض تصنيف حسب ID
+// Get category by ID
 exports.getCategoryById = async (req, res) => {
   try {
     const id = Number(req.params.id);
     const category = await prisma.category.findUnique({ where: { id } });
     if (!category) {
-      return res.status(404).json({ error: "لم يتم العثور على التصنيف" });
+      return res.status(404).json({ error: "Category not found" });
     }
     res.json(category);
   } catch (err) {
-    res.status(500).json({ error: "فشل في جلب التصنيف" });
+    res.status(500).json({ error: "Failed to fetch category" });
   }
 };
 
-// تعديل تصنيف
+// Update category
 exports.updateCategory = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -47,17 +47,17 @@ exports.updateCategory = async (req, res) => {
     });
     res.json(category);
   } catch (err) {
-    res.status(400).json({ error: "فشل تعديل التصنيف", details: err.message });
+    res.status(400).json({ error: "Failed to update category", details: err.message });
   }
 };
 
-// حذف تصنيف
+// Delete category
 exports.deleteCategory = async (req, res) => {
   try {
     const id = Number(req.params.id);
     await prisma.category.delete({ where: { id } });
-    res.json({ message: "تم حذف التصنيف بنجاح" });
+    res.json({ message: "Category deleted successfully" });
   } catch (err) {
-    res.status(400).json({ error: "فشل حذف التصنيف", details: err.message });
+    res.status(400).json({ error: "Failed to delete category", details: err.message });
   }
 };

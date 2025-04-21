@@ -1,33 +1,33 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// ✅ إضافة منتج جديد
+// ✅ Create a new product
 exports.createProduct = async (req, res) => {
   try {
     const data = req.body;
     const product = await prisma.product.create({ data });
     res.status(201).json(product);
   } catch (err) {
-    console.error("❌ خطأ في إنشاء المنتج:", err);
-    res.status(500).json({ error: "فشل إنشاء المنتج", details: err.message });
+    console.error("❌ Error creating product:", err);
+    res.status(500).json({ error: "Failed to create product", details: err.message });
   }
 };
 
-// ✅ عرض كل المنتجات
+// ✅ Get all products
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await prisma.product.findMany({
       include: {
-        category: true // لو حاب تعرض معلومات التصنيف مع كل منتج
+        category: true // If you want to include category info with each product
       }
     });
     res.status(200).json(products);
   } catch (err) {
-    res.status(500).json({ error: "فشل جلب المنتجات" });
+    res.status(500).json({ error: "Failed to fetch products" });
   }
 };
 
-// ✅ عرض منتج واحد
+// ✅ Get a single product
 exports.getProductById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -35,14 +35,14 @@ exports.getProductById = async (req, res) => {
       where: { id },
       include: { category: true }
     });
-    if (!product) return res.status(404).json({ error: "المنتج غير موجود" });
+    if (!product) return res.status(404).json({ error: "Product not found" });
     res.status(200).json(product);
   } catch (err) {
-    res.status(500).json({ error: "فشل جلب المنتج" });
+    res.status(500).json({ error: "Failed to fetch product" });
   }
 };
 
-// ✅ تعديل منتج
+// ✅ Update a product
 exports.updateProduct = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -53,17 +53,17 @@ exports.updateProduct = async (req, res) => {
     });
     res.status(200).json(updated);
   } catch (err) {
-    res.status(500).json({ error: "فشل تحديث المنتج" });
+    res.status(500).json({ error: "Failed to update product" });
   }
 };
 
-// ✅ حذف منتج
+// ✅ Delete a product
 exports.deleteProduct = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     await prisma.product.delete({ where: { id } });
-    res.status(200).json({ message: "تم حذف المنتج بنجاح" });
+    res.status(200).json({ message: "Product deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: "فشل حذف المنتج" });
+    res.status(500).json({ error: "Failed to delete product" });
   }
 };
